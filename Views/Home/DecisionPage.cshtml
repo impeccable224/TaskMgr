@@ -1,0 +1,100 @@
+﻿@model TManager.Models.ViewModels.ProjectVM
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                   Project / Task  Registration 
+                </h2>
+            </div>
+            <div class="body">
+             
+                @using (Html.BeginForm("RedirectTask", null, FormMethod.Post, new { @id = "wizard_with_validation" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                 <h3> Project / Task  Type Decision  </h3>
+                    <fieldset>
+                        <div class="row clearfix">
+
+                            <div class="col-md-12">
+                                <div class="form-group form-float">
+                                    <b>Project / Task Type *</b>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-briefcase"></i>
+                                        </span>
+                                        <div class="form-line">
+                                            @Html.DropDownListFor(model => model.ProjectTaskType, new List<SelectListItem>{
+                                new SelectListItem() {Text = "Application",Value="Application"},
+                                  new SelectListItem() {Text ="Change Request",Value="Change Request"} ,
+                                   new SelectListItem() {Text ="Documentation",Value="Documentattion"},
+                                    new SelectListItem() {Text ="Others",Value="Others"}  }, new { @class = "show-tick form-control required" })
+                                            @Html.ValidationMessageFor(model => model.ProjectTaskType, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                           
+
+                            <!--end of the row fix-->
+                        </div>
+                        <div class="row clearfix" style="display:none" id="changeReq">
+
+                            <div class="col-md-4">
+                                <div class="form-group form-float">
+                                    <b>Projects</b>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-tag"></i>
+                                        </span>
+                                        <div class="form-line">
+                                            @Html.DropDownList("ProjectRegisterID", null, new { @class = "form-control show-tick required" })
+                                            @Html.ValidationMessageFor(model => model.ProjectRegisterID, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+   <script src="~/Scripts/form-wizard.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+               
+        $(function () {
+           
+                      
+            // for request type that is change request  show 
+            $('#ProjectTaskType').on("change", function (e) {
+                //alert('i changed ');
+                var reqtypeVal = $('#ProjectTaskType').val();
+                //alert('reqtypeval' + reqtypeVal);
+                if (reqtypeVal == 'Change Request' || reqtypeVal== 'Documentation') {
+                    // alert('am here to show');
+                    $('#changeReq').show();
+
+                }
+                else {
+                    $('#changeReq').hide();
+                }
+            });
+        });
+    </script>
+
+}
+
+
+
+
