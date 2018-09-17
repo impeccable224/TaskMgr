@@ -1,0 +1,1200 @@
+﻿@model TManager.Models.ViewModels.ProjectVM
+
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- TABLE: Task table -->
+        <div class="box box-warning collapsed-box" style="background-color:#b5def3">
+            <center></center>
+
+            <div class="box-header with-border">
+                <span style="font-size:15px; font-weight:700" class="box-title"><b style="color:#1db027">@Model.ProjectName</b> [Pre-Project Actions]  </span>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span></span>
+                <div class="box-tools pull-right">
+
+                    <button id="ppplus" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                    @* <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>*@
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="table-responsive">
+                    <table class="table no-margin table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Action ID</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Assigned</th>
+                                <th title="Expected Completion Date">Exptd. Compl. Date</th>
+                                <th title="Actual Completion Date">Actu. Compl. Date</th>
+                                <th>Attachments</th>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="ActionTab">
+
+
+                            @*@foreach (var item in ViewBag.Actions)
+                            {*@
+                                <tr>
+                                    <td>AProjectRegisterID</td>
+                                    <td id="ProjectRegisterID">
+                                       
+                                    </td>
+                                    <td id="Model.ProjectRegisterID">
+                                        @*@item.Description*@
+                                    </td>
+                                    <td id="actasn-@Model.ProjectRegisterID">
+                                        @*@{Html.RenderAction("getActionNameFromIGGList", "Home", new { @IGGList = item.AssignedTo, @ActionID = item.ID });}*@
+
+                                    </td>
+                                    <td id="actepdate-@Model.ProjectRegisterID">
+                                        @*@item.ExpectedDate.ToString("dd-MM-yyyy")*@
+
+                                    </td>
+                                    <td id="ACT1-@Model.ProjectRegisterID">
+                                        @*@if (item.ActualDate != null)
+            {
+                @item.ActualDate.ToString("dd-MM-yyyy")
+            }*@
+                                    </td>
+                                    <td id="actfile-@Model.ProjectRegisterID">
+                                        @*@{Html.RenderAction("getDecoratedF4FileIDIcos", "Home", new { @FileIDList = item.Attachment });}*@
+                                    </td>
+                                   
+                                    <td>
+                                        <a id="preact-@Model.ProjectRegisterID" projid="@Model.ProjectRegisterID" actid="@Model.ProjectRegisterID" projname="@Model.ProjectName" actdate="@Model.DateRecieved.Value.ToString("yyyy-MM-dd")" actdes="@Model.BusinessNeed" href="javascript::;" class="btn btn-sm btn-warning btn-flat pull-right ppcrtl" onclick="EditAction(this)"><i class="fa fa-edit"></i></a>
+                                        
+                                    </td>
+
+                                </tr>
+                            @*}*@
+
+                            <tr>
+                               
+
+                                <td colspan="9">
+                                    <span style="float:right">
+                                        <a href="javascript::;" projid="@Model.ProjectRegisterID" projname="@Model.ProjectName" onclick="ClosePreProj(this)" class="btn btn-sm btn-warning btn-flat ppcrtl"><i class="fa fa-check"> IST Approval</i></a>
+                                    </span>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div><!-- /.table-responsive -->
+            </div><!-- /.box-body -->
+            <div class="box-footer clearfix">
+                <a href="javascript::;" class="btn btn-sm btn-info btn-flat pull-left ppcrtl" projid="@Model.ProjectRegisterID" projname="@Model.ProjectName" acttype="Pre" onclick="NewAction(this)">Add New Action <b>| <span style="color:#1c5c20">@Model.ProjectName</span></b></a>
+                @*<a href="javascript::;" class="btn btn-sm btn-success btn-flat pull-right">Done</a>*@
+            </div><!-- /.box-footer -->
+        </div><!-- /.box -->
+    </div><!-- /.col -->
+
+</div><!-- /.row -->
+
+
+<div class="modal fade" id="NewAction" tabindex="-1" role="dialog" style="z-index:5000;" aria-labelledby="myActLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:70%; margin-top:50px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <center><h4 class="modal-title" id="myActLabel" style="color:#1c521d; font-weight:700; display:inline">Add New Action : -- </h4> <span style="color:#ff6a00; font-size:18px; font-weight:700; display:inline" id="tProName"></span></center>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form id="newActionFrm">
+                        <div class="form-group col-md-4">
+                            <label>
+                                Action Name
+                                <a href="#" style="font-size:12px;" data-toggle="popover" data-trigger="focus" data-content="This should be the name of the Action"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <input type="text" value="" id="ActionName" name="ActionName" class="form-control achk" title="This should be the name of the Action" />
+                            <input type="hidden" id="actionProjID" name="ProjectID" />
+                            <input type="hidden" id="ActionType" name="ActionType" />
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label>
+                                Assign to Action
+                                <a href="#" style="font-size:12px;" data-toggle="popover" data-trigger="focus" data-content="People to carry out action"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-7">
+                            <span id="assignaction" class="assignment form-control" style="height:auto; min-height:20px;">
+                                @*<span>L0646788 <i class="fa fa-times rdel" title="Remove"></i></span>*@
+
+                            </span>
+                            <input type="hidden" value="" id="Actionassigned" name="AssignedTo" class="form-control achk" />
+                        </div>
+
+                        <div class="form-group col-md-1">
+                            <label> &nbsp; </label>
+                            <i class="fa fa-user-plus" figg="Actionassigned" fname="assignaction" onclick="srcUser(this)" style="color:green; cursor:pointer;" title="Assign someone to action"></i>
+                        </div>
+
+
+
+                        <div class="form-group col-md-4">
+                            <label>
+                                Action Description
+                                <a href="#" data-toggle="popover" data-trigger="focus" data-content="What the Action is about"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <textarea class="form-control achk" id="AddActDescription" name="Description" placeholder="What is the Action about"></textarea>
+
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label>
+                                Expected Date
+                                <a href="#" data-toggle="popover" data-trigger="focus" data-content="Date expected to be completed"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <input type="text" class="form-control achk" id="ActionExpDate" name="ExpectedDate" title="Click to select date the Action is suppose to be completed" readonly />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>
+                                Attach Document
+                                <a href="#" style="font-size:12px;" data-toggle="popover" data-trigger="focus" data-content="Attatch Document relating to this action"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+
+                        </div>
+                        <div class="form-group col-md-7">
+                            <span id="actionattach" class="assignment form-control" style="height:auto; min-height:20px;">
+                                @*<span>L0646788 <i class="fa fa-times rdel" title="Remove"></i></span>*@
+                            </span>
+                            <input type="hidden" value="" id="DocAttach" name="Attachment" class="form-control" />
+                        </div>
+
+                        <div class="form-group col-md-1">
+                            <label> &nbsp; </label>
+                            <i class="fa fa-upload" style="color:green; cursor:pointer;" filep="DocAttach" ttype="new" decorfilep="actionattach" onclick="OpenFileDiag(this)" title="Attatch Document relating to this action"></i>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <div class="pull-right">
+                                <button type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
+                                <button type="button" onclick="addAction()" class="btn btn-info"> Add Action </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="EditAction" tabindex="-1" role="dialog" style="z-index:5000" aria-labelledby="myActLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:70%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+
+                <center>
+                    <h4 class="modal-title" id="myActLabel" style="color:#1c521d; font-weight:700; display:inline">Edit Action : -- </h4><span style="color:#144f7a; font-size:18px; font-weight:700; display:inline" id="EdittActName"> </span> -- <span style="color:#ff6a00; font-size:18px; font-weight:700; display:inline" id="EdittProName"></span>
+                </center>
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form id="EditActionFrm">
+                        <div class="form-group col-md-4">
+                            <label>
+                                Action Name
+                                <a href="#" style="font-size:12px;" data-toggle="popover" data-trigger="focus" data-content="This should be the name of the Action"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <input type="text" value="" id="EditActionName" name="ActionName" class="form-control" title="This should be the name of the Action" />
+                            <input type="hidden" id="EditactionProjID" name="ProjectID" />
+                            <input type="hidden" id="EditActionID" name="ID" />
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label>
+                                Assign to Action
+                                <a href="#" style="font-size:12px;" data-toggle="popover" data-trigger="focus" data-content="People to carry out action"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-7">
+                            <span id="Editassignaction" class="assignment form-control" style="height:auto">
+                                @*<span>L0646788 <i class="fa fa-times rdel" title="Remove"></i></span>*@
+
+                            </span>
+                            <input type="hidden" value="" id="EditActionassigned" name="AssignedTo" class="form-control" />
+                        </div>
+
+                        <div class="form-group col-md-1">
+                            <label> &nbsp; </label>
+                            <i class="fa fa-user-plus" figg="EditActionassigned" fname="Editassignaction" onclick="srcUser(this)" style="color:green; cursor:pointer;" title="Assign someone to action"></i>
+                        </div>
+
+
+
+                        <div class="form-group col-md-4">
+                            <label>
+                                Action Description
+                                <a href="#" data-toggle="popover" data-trigger="focus" data-content="What the Action is about"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <textarea class="form-control" id="EditActionDescription" name="Description" placeholder="What is the Action about"></textarea>
+
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label>
+                                Expected Date
+                                <a href="#" data-toggle="popover" data-trigger="focus" data-content="Date expected to be completed"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <input type="text" class="form-control" id="EditActionExpDate" name="ExpectedDate" title="Click to select date the Action is suppose to be completed" readonly />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>
+                                Attach Document
+                                <a href="#" style="font-size:12px;" data-toggle="popover" data-trigger="focus" data-content="Attatch Document relating to this action"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+
+                        </div>
+                        <div class="form-group col-md-7">
+                            <span id="eactionattach" class="assignment form-control" style="height:auto; min-height:20px;">
+                                @*<span>L0646788 <i class="fa fa-times rdel" title="Remove"></i></span>*@
+                            </span>
+                            <input type="hidden" value="" id="eDocAttach" name="Attachment" class="form-control" />
+                        </div>
+
+                        <div class="form-group col-md-1">
+                            <label> &nbsp; </label>
+                            <i class="fa fa-upload" style="color:green; cursor:pointer;" filep="eDocAttach" ttype="edit" decorfilep="eactionattach" onclick="OpenFileDiag(this)" title="Attatch Document relating to this action"></i>
+                        </div>
+
+
+                        <div class="form-group col-md-12">
+                            <div class="pull-right">
+                                <button type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
+                                <button type="button" onclick="UpdateCAction()" class="btn btn-warning"> Update Action </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="UpdateAction" tabindex="-1" role="dialog" style="z-index:5000" aria-labelledby="myActLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:70%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+
+                <center><h4 class="modal-title" id="myActLabel" style="color:#1c521d; font-weight:700; display:inline">Update Action : -- </h4> <span style="color:#144f7a; font-size:18px; font-weight:700; display:inline" id="upatActName"></span> -- <span style="color:#ff6a00; font-size:18px; font-weight:700; display:inline" id="upatProName"></span> </center>
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form id="UpdateActionFrm">
+                        <div class="form-group col-md-4">
+                            <label>
+                                Project Name
+                                <a href="#" style="font-size:12px;" data-toggle="popover" data-trigger="focus" data-content="This should be the name of the Project"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <input type="text" value="" id="UpdateProjectName" name="ActionName" class="form-control" title="This should be the name of the Project" readonly />
+                            <input type="hidden" id="UpdateactionProjID" name="ProjectID" />
+                            <input type="hidden" id="actid" name="ProjectID" />
+
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>
+                                Action Name
+                                <a href="#" style="font-size:12px;" data-toggle="popover" data-trigger="focus" data-content="This should be the name of the Action"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <input type="text" value="" id="UpdateActionName" name="ActionName" class="form-control" title="This should be the name of the Action" readonly />
+                            <input type="hidden" id="UpdateactionProjID" name="ProjectID" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>
+                                Prev. Accomplishments
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <span id="pAccomp" class="pAccomp form-control" style="height:auto">
+                                @*<span>L0646788 <i class="fa fa-times rdel" title="Remove"></i></span>*@
+                                I was able to Blaalalalalalalal
+                                akcjljfkjflks <br /> ghghdhfghdfghdf <br /> fsgshjdhfkdgafhdsgagskfgjksG <br /> FGRFSGSGFGD\GDGDAGDFGAGD <br /> FSUGSIYDUIFYISAFYGDUYFAI
+                            </span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>
+                                Accomplishment
+                                <a href="#" data-toggle="popover" data-trigger="focus" data-content="What was done?"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <textarea class="form-control" id="ActionAccomplishment" name="Accomplishment" placeholder="What was done?"></textarea>
+
+                        </div>
+
+
+                        <div class="form-group col-md-12">
+                            <div class="pull-right">
+                                <button type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
+                                <button type="button" onclick="UpdateAccomplishment(this)" class="btn btn-warning"> Update Action </button>
+                                <button type="button" onclick="CompleteAction(this)" class="btn btn-success" title="By clicking [Complete Action], you are closing the action"> Complete Action </button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @*NOTE: These should NOT be used in a production situation
+        They do contains useful snippets on how to setup charts*@
+    @*<script src="~/Scripts/AdminLTE/pages/dashboard2.js"></script>
+        <script src="~/Scripts/AdminLTE/demo.js"></script>*@
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+    //$(document).ready(function () {  });
+
+
+                    function EditProjectName()
+                    {
+                        var ctrContent = $('#ProjectName').html();
+                        // var ctrContent = $('#' + ctrContent).html();
+                        var ProjID = $('#mProjID').val();
+                        $('#EditContent').modal('show');
+                        $('#EditContLabel').html('Project Name : ');
+                        $('#EditContTitle').html('Edit Project Name');
+                        $('#EditContItem').val(ctrContent);
+                        $('#EditProjID').val(ProjID);
+                        $('#EditForm').attr('action', 'updateprojectname');
+                    }
+
+                    function EditProjectObj() {
+                        var ctrContent = $('#ProjectObj').html();
+                        // var ctrContent = $('#' + ctrContent).html();
+                        var ProjID = $('#mProjID').val();
+                        $('#EditContent').modal('show');
+                        $('#EditContLabel').html('Project Objective : ');
+                        $('#EditContTitle').html('Edit Project Objective');
+                        $('#EditContItem').val(ctrContent);
+                        $('#EditProjID').val(ProjID);
+                        $('#EditForm').attr('action', 'updateprojectobj');
+
+                    }
+
+    function UpdateAction(elem) {
+        $('#UpdateAction').modal('show');
+        //upatProName
+        // $('#actionProjID').val($(elem).attr('projid')); //
+        $('#actid').val($(elem).attr('actid'));
+        $('#UpdateActionName').val($(elem).attr('actname'));
+        $('#upatActName').html($(elem).attr('actname'));
+        $('#UpdateProjectName').val($(elem).attr('projname'));
+        $('#upatProName').html($(elem).attr('projname'));
+        //Here We need to Read the |Accomplishemnt now
+        var ActID = $(elem).attr('actid');
+        var data = { 'ActionID': ActID };
+        $.ajax({
+            type: "POST",
+            url: "@(Url.Action("GetAccomplishment", "Home"))",
+
+            data: data,
+            success: function (data) {
+                $('#pAccomp').html(data.Accom);
+                //alert(data.Accom)
+            },
+            error: function (e) {
+                alert(e.statusText);
+            }
+        });
+
+    }
+
+    function UpdateAccomplishment(elem) {
+
+        //Here We need to Read the |Accomplishemnt now
+        var Acmm = $('#ActionAccomplishment').val();
+        var ActID = $('#actid').val(); //
+        var ActAccomplishment = $('#ActionAccomplishment').val();
+        if (ActAccomplishment == "" || ActAccomplishment == null) {
+            generalError("No Accomplisment Recorded");
+            return false
+        }
+        var data = { 'ActionID': ActID, 'Acm': Acmm };
+        $.ajax({
+            type: "POST",
+            url: "@(Url.Action("UpdateAccomplishment", "Home"))",
+
+            data: data,
+            success: function (data) {
+                $('#pAccomp').html('');
+                //alert(data.Accom)
+                $('#UpdateAction').modal('hide');
+                //upatProName
+                // $('#actionProjID').val($(elem).attr('projid')); //
+                $('#UpdateActionName').val('');
+                $('#upatActName').html('');
+                $('#UpdateProjectName').val('');
+                $('#upatProName').html('');
+                $('#ActionAccomplishment').html('');
+
+            },
+            error: function (e) {
+                alert(e.statusText);
+            }
+        });
+
+    }
+
+    function CompleteAction() {
+        var r = confirm("Are you sure you want to mark this action as completed?");
+        if (r == true) {
+            // x = "You pressed OK!";
+
+            var Acmm = $('#ActionAccomplishment').val();
+            var ActID = $('#actid').val();
+            var data = { 'ActionID': ActID, 'Acm': Acmm };
+            $.ajax({
+                type: "POST",
+                url: "@(Url.Action("CompleteAccomplishment", "Home"))",
+
+                data: data,
+                success: function (data) {
+                    $('#pAccomp').html('');
+                    //alert(data.Accom)
+                    $('#UpdateAction').modal('hide');
+                    //upatProName
+                    // $('#actionProjID').val($(elem).attr('projid')); //
+                    $('#UpdateActionName').val('');
+                    $('#upatActName').html('');
+                    $('#UpdateProjectName').val('');
+                    $('#upatProName').html('');
+                    $('#ActionAccomplishment').html('');
+                    generalSuccess(data.msg);
+                    $('#ACT1-' + ActID).html(data.cdate);
+
+
+                },
+                error: function (e) {
+                    alert(e.statusText);
+                }
+            });
+
+        } else {
+            //x = "You pressed Cancel!";
+            return false;
+        }
+
+
+    }
+    //////////////////////////////////////
+    function NewAction(elem) {
+        $('#NewAction').modal('show');
+        $('#actionProjID').val($(elem).attr('projid'));
+        $('#tProName').html($(elem).attr('projname'));
+        $('#ActionType').val($(elem).attr('acttype'));
+        $('#AddActDescription').val('');
+        $('#AddActDescription').html('');
+
+    }
+
+    ////////////////////////////////////////
+    function EditAction(elem) {
+        $('#EditAction').modal('show');
+        $('#EditactionProjID').val($(elem).attr('projid'));
+        $('#EditActionID').val($(elem).attr('actid'));
+        $('#EdittProName').html($(elem).attr('projname'));
+        $('#EdittActName').html($(elem).attr('actname'));
+        $('#EditActionName').val($(elem).attr('actname'));
+        $('#EditActionDescription').val($(elem).attr('actdes'));
+        $('#EditActionExpDate').val($(elem).attr('actdate'));
+        var IGGList = $(elem).attr('igg');
+        $('#eDocAttach').val($(elem).attr('fileid'));
+        var FileIDList = $(elem).attr('fileid');
+        //We need to check if digg is added at model level or from the hooks hahahahah.....
+        if ($(elem).attr('digg') == "mdADD") {
+
+            //Personnel Assigned to Task
+            var data = { 'IGGList': IGGList, 'txtIGG': 'EditActionassigned' };
+            $.ajax({
+                type: "POST", url: "@(Url.Action("getDecoratedNameFromIGGList", "Home"))", data: data,
+
+                success: function (data) { $('#Editassignaction').html(data) },
+                error: function (e) { }
+            });
+
+            //File Attached
+            var data = { 'FileIDList': FileIDList, 'SDFileID': 'eDocAttach', 'SDDecorID': 'eactionattach' };
+            //var data = { 'FileIDList': FileIDList };
+            $.ajax({
+                type: "POST", url: "@(Url.Action("getDecoratedF4FileIDList", "Home"))", data: data,
+
+                success: function (data) { $('#eactionattach').html(data) },
+                error: function (e) { }
+            });
+
+
+            @*var data = { 'FileIDList': FileIDList, 'txtIGG': 'EditActionassigned' };
+            $.ajax({ type: "POST", url: "@(Url.Action("getDecoratedNameFromIGGList", "Home"))", data: data,
+
+            success: function (data) { $('#Editassignaction').html(data) },
+            error: function (e) { }
+            });*@
+
+        }
+        else {
+            $('#Editassignaction').html($(elem).attr('digg'));
+            $('#eactionattach').html($(elem).attr('filedeco'));
+            $('#eDocAttach').val($(elem).attr('fileid'));
+        }
+
+        $('#EditActionassigned').val($(elem).attr('igg'));
+
+
+    }
+
+    function UpdateCAction() {
+
+        var EditActionName = $('#EditActionName').val();
+        var EditActionassigned = $('#EditActionassigned').val();
+        var EditActionDes = $('#EditActionDescription').val();
+        var EditActionExpDate = $('#EditActionExpDate').val();
+        var EditActionID = $('#EditActionID').val();
+        var datastring = $("#EditActionFrm").serialize();
+
+        $.ajax({
+            type: "POST",
+            url: "@(Url.Action("UpdateAction", "Home"))",
+            data: datastring,
+            success: function (data) {
+                $('#EditAction').modal('hide');
+
+                var dateString = data.actepdate.substr(6);
+                var currentTime = new Date(parseInt(dateString));
+                var month = currentTime.getMonth() + 1;
+                var day = currentTime.getDate();
+                var year = currentTime.getFullYear();
+                var date = day + "-" + month + "-" + year;
+                //alert(date);
+                $('#actnme-' + EditActionID).html(data.actnme);
+                $('#actdsc-' + EditActionID).html(data.actdsc);
+                $('#actasn-' + EditActionID).html(data.actasn);
+                $('#actepdate-' + EditActionID).html(date); //DIY actfile
+               // $('#actfile-' + EditActionID).html(data.actfile); //DIY
+                $('#actfile-' + EditActionID).html(data.fileicos); //DIY
+
+                $('#preact-' + EditActionID).attr('filedeco', data.actfile); //DIY
+                $('#preact-' + EditActionID).attr('fileid', data.fileids); //DIY
+                $('#eactionattach').val(data.actfile); //DIY
+
+                $('#eDocAttach').val(data.fileids);
+
+                //eactionattach
+
+                //$('#pAccomp').html('');
+                ////alert(data.Accom)
+                //$('#UpdateAction').modal('hide');
+                ////upatProName
+                //// $('#actionProjID').val($(elem).attr('projid')); //
+                //$('#UpdateActionName').val('');
+                //$('#upatActName').html('');
+                //$('#UpdateProjectName').val('');
+                //$('#upatProName').html('');
+                //$('#ActionAccomplishment').html('');
+            },
+            error: function (e) {
+                alert(e.statusText);
+            }
+        });
+
+    }
+
+
+
+
+    function addAction() {
+        if (ValidNewActionFields() == "Filled") {
+
+            var datastring = $("#newActionFrm").serialize();
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddAction", "Home")",
+                data: datastring,
+                dataType: "json",
+                success: function (data) {
+                    if (data.ActionType == "Post") {
+                        $('#DeploymentTab tr:first').before(data.TabRow);
+                    }
+                    else {
+                        $('#ActionTab tr:first').before(data.TabRow);
+                    }
+                    generalSuccess(data.msg);
+                    $('#ActionName').val('');
+                    $('#AddActDescription').html('');
+                    $('#Actionassigned').val('');
+                    $('#ActionExpDate').val('');
+                    $('#assignaction').html('');
+                    $('#actionattach').html('');
+                    $('#NewAction').modal('hide');
+                },
+                error: function () {
+                    //alert('error handing here');
+                    generalError(data.msg);
+                }
+            });
+        }
+        else if (ValidNewActionFields() == "Incomplete") {
+
+            generalError("Kindly fill the form compeletly");
+
+            return false;
+        }
+    }
+
+
+    function OpenTask(elem) {
+        $('#NewTask').modal('show');
+        $('#tProjID').val($(elem).attr('projID'));
+        $('#tProName').html($(elem).attr('projname'));
+    }
+    function addTask() {
+        if (ValidNewTaskFields() == "Filled") {
+            var datastring = $("#NewTaskFrm").serialize();
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddTask", "Home")",
+                data: datastring,
+                dataType: "json",
+                success: function (data) {
+                    //alert(data.TabRow);
+                    if ($('#TaskTab').html() == "") {
+                        $("#TaskTab").append(data.TabRow);
+                    }
+                    else {
+                        $('#TaskTab tr:first').before(data.TabRow);
+
+                    }
+                    generalSuccess(data.msg);
+                    $('#TaskName').val('');
+                    $('#TaskDescription').html('');
+                    $('#tassigned').val('');
+                    $('#SKExpDate').val('');
+                    $('#tassign').html('');
+                    $('#NewTask').modal('hide');
+
+                },
+                error: function () {
+                    //alert('error handing here');
+                    generalError(data.msg);
+                }
+            });
+        }
+        else if (ValidNewActionFields() == "Incomplete") {
+            generalError("Kindly fill the form compeletly");
+            return false;
+        }
+    }
+    function UpdateTask(elem) {
+        $('#UpdateTask').modal('show');
+        //upatProName
+        $('#UpdateTaskProjID').val($(elem).attr('projid'));
+        $('#taskid').val($(elem).attr('taskid'));
+        $('#UpdateTaskName').val($(elem).attr('taskname'));
+        $('#upatTskName').html($(elem).attr('taskname'));
+        $('#upTskProName').html($(elem).attr('projname'));
+        $('#UpdateTProjectName').val($(elem).attr('projname')); //upatTskName //upTskProName
+        $('#pTAccomp').html($(elem).attr('taskname'));
+        var TaskPer = $(elem).attr('tper');
+        $('#tper').html("Percentage of Completion [ " + TaskPer + "% ]");//tper
+        //Here We need to Read the |Accomplishemnt now
+        var ActID = $(elem).attr('taskid');
+        var data = { 'TaskID': ActID };
+        $.ajax({
+            type: "POST",
+            url: "@(Url.Action("GetTAccomplishment", "Home"))",
+            data: data,
+            success: function (data) {
+                $('#pTAccomp').html(data.Accom);
+                //alert(data.Accom)//UpdateTask
+
+
+            },
+            error: function (e) {
+                alert(e.statusText);
+            }
+        });
+
+    }
+
+    function UpdateTAccomplishment(elem) {
+        //Here We need to Read the |Accomplishemnt now
+        var Acmm = $('#ActionTAccomplishment').val();
+        //var ActAccomplishment = $('#ActionAccomplishment').val();
+        if (Acmm == "" || Acmm == null) {
+            generalError("No Accomplisment Recorded");
+            return false
+        }
+        var ActID = $('#taskid').val();
+        var PecentC = $('#perAccom').val();
+        var data = { 'TaskID': ActID, 'Acm': Acmm, 'PecentC': PecentC };
+        $.ajax({
+            type: "POST",
+            url: "@(Url.Action("UpdateTAccomplishment", "Home"))",
+
+            data: data,
+            success: function (data) {
+                $('#pTAccomp').html('');
+                //alert(data.pc)
+                //alert(data.pp + '%');
+                //$('#TKf1-' + ActID).html(data.pp + '%');
+                //$('#TKf1-' + ActID).text("God is great"); //TSK1
+                //$('#TKf1-' + ActID).html("God is great"); //
+                $('#UpdateTask').modal('hide');
+                $('#perAccom').val('');
+                $('#ActionTAccomplishment').html('');
+                //$('#TKf1-' + ActID).attr('per', data.pc);
+                $('#TKf1-' + ActID).attr('per', data.pc);
+                $('#TKf1-' + ActID).attr('wg', data.wg);
+
+                $('#TSK1-' + ActID).html(data.pc);
+                $('#updt-' + ActID).attr('tper', data.pc);
+                //$('#TKf1-' + ActID).attr('tper', data.pp);
+                $('#TKf1-' + ActID).html(data.newpp + '%');
+
+
+
+                //Update Actual Comp Date
+                $('#ACTD1-' + ActID).html(data.actdate);
+
+                @*$(elem).attr('tper')
+
+                            id="updt-@item.ID*@
+
+
+                //var ProjID = $('#mProjID').val();
+                                
+                WeightReComputer();
+            },
+            error: function (e) {
+                //alert(e.statusText);
+                generalError(e.statusText);
+            }
+        });
+
+    }
+
+    ////////////////////////////////////////
+    function EditTask(elem) {
+        $('#EditTask').modal('show');
+        $('#EditTskProjID').val($(elem).attr('projid'));
+        $('#EditTskID').val($(elem).attr('taskid'));
+        $('#EditTskProName').html($(elem).attr('projname'));
+        $('#EditTskNamen').html($(elem).attr('taskname'));
+        $('#EditTskName').val($(elem).attr('taskname'));
+        $('#EditTskDescription').val($(elem).attr('taskdes'));
+        $('#EditTskExpDate').val($(elem).attr('taskdate'));
+        $('#EditTskassigned').val($(elem).attr('igg'));
+        $('#eperid').val($(elem).attr('pper'));
+        $('#eweightid').val($(elem).attr('taskweight'));
+        //$('#eutaskattach').html($(elem).attr('dfid'));
+        //$('#euDocTAttach').val($(elem).attr('fileid'));
+
+
+        var IGGList = $(elem).attr('igg');
+        var FileIDList = $(elem).attr('fileid');
+        $('#euDocTAttach').val($(elem).attr('fileid'));
+        //
+        //We need to check if digg is added at model level or from the hooks hahahahah.....
+        if ($(elem).attr('digg') == "mdADD") {
+            var data = { 'IGGList': IGGList, 'txtIGG': 'EditTskassigned' };
+            $.ajax({
+                type: "POST", url: "@(Url.Action("getDecoratedNameFromIGGListTsk", "Home"))", data: data,
+
+                success: function (data) { $('#EditassignTsk').html(data) },
+                error: function (e) { }
+            });
+
+            //File Attached
+            var TaskIDn = $(elem).attr('taskid');
+            var data = { 'FileIDList': FileIDList, 'SDFileID': 'euDocTAttach', 'SDDecorID': 'eutaskattach' };
+            $.ajax({
+                type: "POST", url: "@(Url.Action("getDecoratedF4FileIDList", "Home"))", data: data,
+
+                success: function (data) { $('#eutaskattach').html(data); $('#' + TaskIDn).attr('dfid ', data); },
+                error: function (e) { }
+            });
+
+
+
+        }
+        else {
+            $('#EditassignTsk').html($(elem).attr('digg'));
+            $('#eutaskattach').html($(elem).attr('dfid'));
+        }
+        WeightReComputer();
+
+    }
+
+    function UpdateCTsk() {
+
+        var EditTskName = $('#EditTskName').val();
+        var EditTskassigned = $('#EditTskassigned').val();
+        var EditTskDes = $('#EditTskDescription').val();
+        var EditTskExpDate = $('#EditTskExpDate').val();
+        var EditTskPer = $('#eperid').val();
+        var datastring = $("#EditTskFrm").serialize();
+        var ActID = $("#EditTskID").val();
+        //alert(ActID);
+        $.ajax({
+            type: "POST",
+            url: "@(Url.Action("UpdateTask", "Home"))",
+            data: datastring,
+            success: function (data) {
+                $('#EditTask').modal('hide');
+                //alert("Hey Hey  " + data.pc);
+                //return Json(new { msg = msg, ActionID = oldTask.ID.Value, pc = oldTask.PercentageInProject, pp = pp, wg = oldTask.TaskWeight });
+                $('#TSK1-' + ActID).html(data.pc);
+                $('#updt-' + ActID).attr('tper', data.pc);
+                $('#edt-' + ActID).attr('pper', data.pc);
+                $('#edt-' + ActID).attr('taskweight', data.wg);
+                $('#TKf1-' + ActID).attr('per', data.pc);
+                $('#TKf1-' + ActID).attr('wg', data.wg);
+                $('#EXPTD1-' + ActID).html(data.expDate);
+                $('#TKf1-' + ActID).html(data.pp + '%');
+
+                $('#WGT1-' + ActID).html(data.wg);
+                $('#taskfile-' + ActID).html(data.fileicos);
+                $('#edt-' + ActID).attr('fileid', data.fileids);
+                $('#edt-' + ActID).attr('dfid', data.actfile);
+
+                generalSuccess(data.msg);
+                WeightReComputer();
+            },
+            error: function (e) {
+                // alert(e.statusText);
+                generalError(e.statusText);
+            }
+        });
+
+
+    }
+
+    function WeightReComputer() {
+        var OverallCompeltion = 0.0;
+
+        $.each($(".rwchker"), function (i, v) {
+            // To bE COuntined
+            var TaskWeight = $(v).attr('wg');
+            var TaskPerCent = $(v).attr('per');
+            var TaskID = $(v).attr('tskid');
+            var ProjID = $(v).attr('projid');
+
+            //return false;
+            var datastring = { 'TaskWeight': TaskWeight, 'TaskPerCent': TaskPerCent, 'TaskID': TaskID, 'ProjID': ProjID };
+
+
+            $.ajax({
+                type: "POST",
+                url: "@(Url.Action("jvwPerCentCompletion", "Home"))",
+                data: datastring,
+                success: function (data) {
+                    $(v).html(data.pp);
+                    OverallCompeltion = OverallCompeltion + parseFloat(data.pp);
+                    // generalSuccess("Project Completion at this Phase : " + OverallCompeltion + "%");
+                    $('#proCompletion').html("Project Completion at this Phase : " + OverallCompeltion + "%")
+                },
+                error: function (e) {
+                    // alert(e.statusText);
+                    generalError(e.statusText);
+                }
+            });
+
+        });
+
+
+
+
+    }
+
+    $(".achk").change(function (elem) {
+        $('.achk').attr('style', 'background-color: #fff');
+    });
+
+    function ValidNewActionFields() {
+        //Let's check through the form now
+        var fStatus = 0;
+        $.each($(".achk"), function (i, v) {
+
+            var sFildVal = $(v).val();
+            if (sFildVal == "" || sFildVal == null) {
+                $(v).attr('style', 'background-color: #ff5252');
+                //$("#TABPD" + pBookDateId).attr('style', 'background-color: #EC99AA; float:left; border:0; font-size:11px; margin-top:15px; width:100%;');
+                fStatus = 1;
+                //return false;
+                //exit;
+            }
+            else {
+
+            }
+        });
+
+
+        if (fStatus == 1) {
+            return "Incomplete";
+        }
+        else {
+            return "Filled";
+        }
+    }
+
+    function ValidNewTaskFields() {
+        //Let's check through the form now
+        var fStatus = 0;
+        $.each($(".tchk"), function (i, v) {
+
+            var sFildVal = $(v).val();
+            if (sFildVal == "" || sFildVal == null) {
+                $(v).attr('style', 'background-color: #ff5252');
+                //$("#TABPD" + pBookDateId).attr('style', 'background-color: #EC99AA; float:left; border:0; font-size:11px; margin-top:15px; width:100%;');
+                fStatus = 1;
+                //return false;
+                //exit;
+            }
+            else {
+
+            }
+        });
+
+
+        if (fStatus == 1) {
+            return "Incomplete";
+        }
+        else {
+            return "Filled";
+        }
+    }
+
+
+
+    function ClosePreProj(elem) {
+        //WeightReComputer();
+        var ProjID = $(elem).attr('projid');
+        var ProjNAME = $(elem).attr('projname');
+        $('#PreProjClose').modal('show');
+        $('#cPreProjNme').html(ProjNAME);
+        $('#proName1').html(ProjNAME);
+        $('#proName2').html(ProjNAME);
+        $('#ClosePreProjectID').val(ProjID);
+
+    }
+
+    function MoveToProjectBuildPhase(elem) {
+        var ProjID = '@ViewBag.ProjectIdent';  //$('#ClosePreProjectID').val();
+        var NewStage = 1;
+        var datastring = { 'ProjID': ProjID, 'NewStage': NewStage };
+
+        $.ajax({
+            type: "POST",
+            url: "@(Url.Action("changeProjPhase", "Home"))",
+            data: datastring,
+            success: function (data) {
+                $('#PreProjClose').modal('hide');
+                generalSuccess(data.msg);
+
+
+
+            },
+            error: function (e) {
+                // alert(e.statusText);
+                generalError(e.statusText);
+            }
+        });
+
+    }
+
+    function CloseProjBuild(elem) {
+        var ProjID = '@ViewBag.ProjectIdent';
+        var ProjNAME = $(elem).attr('projname');
+        $('#ProjBuildClose').modal('show');
+        $('#cProjBuildNme').html(ProjNAME);
+        $('#proBName1').html(ProjNAME);
+        $('#proBName2').html(ProjNAME);
+        $('#CloseProjBuildID').val(ProjID);
+    }
+
+    function MoveToDeployment(elem) {
+        var ProjID = '@ViewBag.ProjectIdent';
+        var NewStage = 2;
+        var datastring = { 'ProjID': ProjID, 'NewStage': NewStage };
+
+        $.ajax({
+            type: "POST",
+            url: "@(Url.Action("changeProjPhase", "Home"))",
+            data: datastring,
+            success: function (data) {
+                $('#ProjBuildClose').modal('hide');
+                generalSuccess(data.msg);
+
+            },
+            error: function (e) {
+                // alert(e.statusText);
+                generalError(e.statusText);
+            }
+        });
+    }
+
+
+    function CloseDeploy(elem) {
+        var ProjID = '@ViewBag.ProjectIdent';
+        var ProjNAME = $(elem).attr('projname');
+        $('#DeploymentClose').modal('show');
+        $('#cdProjBuildNme').html(ProjNAME);
+        $('#proBName11').html(ProjNAME);
+        $('#proBName22').html(ProjNAME);
+        $('#CloseLiveID').val(ProjID);
+    }
+
+    function MoveToClosePhase(elem) {
+        //var ProjID = $(elem).attr('projid');
+        var ProjID = '@ViewBag.ProjectIdent';
+        var NewStage = 3;
+        var datastring = { 'ProjID': ProjID, 'NewStage': NewStage };
+
+        $.ajax({
+            type: "POST",
+            url: "@(Url.Action("changeProjPhase", "Home"))",
+            data: datastring,
+            success: function (data) {
+                $('#DeploymentClose').modal('hide');
+                generalSuccess(data.msg);
+
+            },
+            error: function (e) {
+                // alert(e.statusText);
+                generalError(e.statusText);
+            }
+        });
+    }
+
+    function MoveToProductionPhase(elem) {
+        //var ProjID = $(elem).attr('projid');
+        var ProjID = '@ViewBag.ProjectIdent';
+        var NewStage = 4;
+        var datastring = { 'ProjID': ProjID, 'NewStage': NewStage };
+
+        $.ajax({
+            type: "POST",
+            url: "@(Url.Action("changeProjPhase", "Home"))",
+            data: datastring,
+            success: function (data) {
+                $('#DeploymentClose').modal('hide');
+                generalSuccess(data.msg);
+
+            },
+            error: function (e) {
+                // alert(e.statusText);
+                generalError(e.statusText);
+            }
+        });
+    }
+    </script>
+
+
+
+    <script>
+
+         function PreProjectExDate()
+         {
+             var ProjectID = $('#mProjID').val();
+             var ExDate = $('#PreProjectExpDate').val();
+             //alert(ProjectID); //return false;
+
+             $.ajax({
+                 url: "@Url.Action("SetExpectedDate", "Home")",
+                 data: { "ExDate": ExDate, "DateType": "PreProject", "ProjID": ProjectID },
+             type: "POST",
+             //dataType: "json",
+             //contentType: "application/json; charset=utf-8",
+             success: function (data) {
+
+             },
+             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                // alert(errorThrown);
+             }
+         });
+
+         }
+    </script>
+
+
+    <script>
+
+                    function DeploymentExDate()
+                    {
+                        var ProjectID = $('#mProjID').val();
+                        var ExDate = $('#DeploymentExpDate').val();
+                        //alert(ProjectID); //return false;
+
+                        $.ajax({
+                            url: "@Url.Action("SetExpectedDate", "Home")",
+                            data: { "ExDate": ExDate, "DateType": "ProjectDeployment", "ProjID": ProjectID },
+                        type: "POST",
+                        //dataType: "json",
+                        //contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            // alert(errorThrown);
+                        }
+                    });
+
+                    }
+
+    </script>
+
+    <script>
+
+                function ProjectBuildExDate()
+                {
+                    var ProjectID = $('#mProjID').val();
+                    var ExDate = $('#ProjectBuildExpDate').val();
+                    //alert(ProjectID); //return false;
+
+                    $.ajax({
+                        url: "@Url.Action("SetExpectedDate", "Home")",
+                        data: { "ExDate": ExDate, "DateType": "ProjectBuild", "ProjID": ProjectID },
+                    type: "POST",
+                    //dataType: "json",
+                    //contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        // alert(errorThrown);
+                    }
+                });
+
+                }
+    </script>
+}
