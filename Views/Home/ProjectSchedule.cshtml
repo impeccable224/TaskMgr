@@ -1,0 +1,734 @@
+﻿@model TManager.Models.ViewModels.ProjectVM
+@{
+    ViewBag.Title = "Project Schdule";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    PROJECT SCHEDULE &nbsp; @Model.ProjectName
+                </h2>
+            </div>
+            <div class="body">
+                @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data", @id = "wizard_with_validation" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @Html.HiddenFor(model => model.multiSelectLob)
+                     @Html.HiddenFor(model => model.ProjectRegisterID)
+                    <h3>Project Information</h3>
+                    <fieldset>
+                        <div class="row clearfix">
+                            <div class="col-md-12">
+                                <div class="form-group form-float">
+                                    <b>Project Name*</b>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-briefcase"></i>
+                                        </span>
+                                        <div class="form-line">
+                                            @Html.TextBoxFor(model => model.ProjectName, new { @class = "form-control", @readonly = "readonly" })
+                                            @Html.ValidationMessageFor(model => model.ProjectName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end of the row fix-->
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-md-4">
+                                <div class="form-group form-float">
+                                    <b>Requesting Company*</b>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-user"></i>
+                                        </span>
+                                        <div class="form-line">
+                                          @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", @readonly = "readonly" })
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-float">
+                                    <b>Department Responsible *</b>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-navicon"></i>
+                                        </span>
+                                        <div class="form-line">
+                                            @Html.TextBoxFor(model => model.DeptResponsible, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-float">
+                                    <b>Project Type *</b>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-navicon"></i>
+                                        </span>
+                                        <div class="form-line">
+                                            @Html.TextBoxFor(model => model.ProjectTaskType, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-md-10">
+                                <div class="form-group form-float">
+                                    <b>Project Objective*</b>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-briefcase"></i>
+                                        </span>
+                                        <div class="form-line">
+                                            @Html.TextBoxFor(model => model.ProjectObjective, new { @class = "form-control ", @readonly = "readonly" })
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                                 
+                      
+                            <div class="col-md-2">
+                                <div class="form-group form-float">
+                                    <b>Priority *</b>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            @*<i class="fa fa-home"></i>*@
+                                        </span>
+                                        <div>
+                                            @Html.TextBoxFor(model => model.Priority, new { @class = "form-control", @readonly = "readonly" })
+                                  @*@Html.DropDownListFor(model => model.Priority, new SelectList(
+                  new List<Object>{
+                       new { value = "High" , text = "High"  },
+                       new { value = "Medium" , text = "Medium" },
+                       new { value = "Low" , text = "Low" }
+                  },
+                  "value",
+                  "text"
+        ), new { @class = "form-control show_tick" })
+                                            @Html.ValidationMessageFor(model => model.Priority)*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                                    
+                        </div>
+                       
+                    </fieldset>
+    <h3>Date Shedules   Information </h3>
+    <fieldset>
+        <div class="row clearfix">
+
+            <div class="col-md-6">
+                <div class="form-group form-float">
+                    <b>Start Development Date*</b>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                        <div class="form-line">
+                            @Html.TextBoxFor(model => model.DevStartDate, new { @class = "datepicker form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.DevStartDate, "", new { @class = "text-danger required" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group form-float">
+                    <b>End Development Date*</b>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                        <div class="form-line">
+                           @Html.TextBoxFor(model => model.DevEndDate, new { @class = "datepicker form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.DevEndDate, "", new { @class = "text-danger required" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row clearfix">
+
+            <div class="col-md-6">
+                <div class="form-group form-float">
+                    <b>UAT Date*</b>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                        <div class="form-line">
+                            @Html.TextBoxFor(model => model.UATDate, new { @class = "datepicker form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.UATDate, "", new { @class = "text-danger required" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group form-float">
+                    <b>Go Live Date*</b>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                        <div class="form-line">
+                           @Html.TextBoxFor(model => model.ImplementationDate, new { @class = "datepicker form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.ImplementationDate, "", new { @class = "text-danger required" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+    </fieldset>
+
+       <h3>Milestones and Task  Information </h3>
+                    <fieldset>
+                        <div class="row clearfix">
+                            <div class="col-md-12">
+                                <a href="javascript::;" class="btn btn-sm btn-success btn-flat waves-effect" projid="@Model.ProjectRegisterID" projname="@Model.ProjectName" onclick="NewMilestone(this)"><i class="fa fa-flag-checkered"></i> Add New Milestone @*<b>| <span style="color:#1c5c20">@Model.ProjectName</span></b>*@</a>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+
+                           <table class="MilestoneTab">
+                            @*<tr>
+                               <td></td>
+                                <td><table id="TaskM-"></table></td>
+                               </tr>*@
+                           </table>
+                               
+                            </div>
+                      </fieldset>
+
+
+                    <h3>Files And Document Uploads </h3>
+                    <fieldset>
+
+                        <h4><i class="fa fa-tags"></i> Attachments <a id="attach-doc" href="javascript:;">[<i class="fa fa-plus"></i>]</a></h4>
+                        <div>
+                            <ol class="attachment" id="attf"></ol>
+                        </div>
+
+                    </fieldset>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display:none" id="attach-dialog">
+    <form method="post" enctype="multipart/form-data" id="attach-form" action="@Url.Action("UploadDoc","Home")">
+        <div class="forms" style="width: 100%; border: none; padding:0;">
+            <p>
+                <input type="file" name="AttachedFile" id="AttachedFile" /><input type="hidden" name="FDescription" id="FDescription" />&nbsp;<input type="submit" name="Upload" id="Upload" value="Attach File" />
+            </p>
+        </div>
+    </form>
+</div>
+
+<<div class="modal fade" id="NewMilestone" tabindex="-1" role="dialog" style="z-index:5000" aria-labelledby="MSLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <center><h4 class="modal-title" id="myMSLabel" style="color:#1c521d; font-weight:700;">:-Add New Milestone-: &nbsp; @Model.ProjectName</h4></center>
+                <center><span style="float:right" id="perinpro"></span></center>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form id="newMilestoneFrm">
+
+                        <div class="form-group col-md-4">
+                            <label>
+                                Milestone Name
+                                <a href="#" style="font-size:12px;" title="Milestone Name" data-toggle="popover" data-trigger="focus" data-content="This should be the name of the Milestone"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <div class="form-line">
+                                <input type="text" value="" id="MilestoneName" name="MilestoneName" class="form-control mchk" title="This should be the name of the Milestone" />
+                                <input type="hidden" id="MSProjID" name="ProjectID" />
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label>
+                                Milestone Description
+                                <a href="#" title="Milestone Description" data-toggle="popover" data-trigger="focus" data-content="What the Milestone is about"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <div class="form-line">
+                                <textarea class="form-control mchk" id="MilestoneDescription" name="MilestoneDescr" placeholder="What is the Milestone about"></textarea>
+                            </div>
+                            </div>
+
+                        <div class="form-group col-md-4">
+                            <label>
+                                Milestone Weight
+                                <a href="#" title="Milestone Weight" data-toggle="popover" data-trigger="focus" data-content="The weight of Milestone outof 100 for the overall project"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <div class="form-line">
+                                <input type="text" title="Milestone weight out of 100 for the overall project " id="MilestoneWeight" name="weight" class="form-control mchk" onchange="chkweight();" onkeypress="return isNumberKey(event)" />
+                                </div>
+                            </div>
+                                               
+                          <div class="form-group col-md-4">
+                            <label>
+                                Start Date
+                                <a href="#" title="Start Date" data-toggle="popover" data-trigger="focus" data-content="Click to select date the Milestone is suppose to start"><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <div class="form-line">
+                                <input type="text" class="form-control datepicker mchk" id="MSStartDate" name="StringStartDate" title="Click to select date the Milestone is suppose to start" readonly />
+                                </div>
+                            </div>
+
+                        <div class="form-group col-md-4">
+                            <label>
+                                End Date
+                                <a href="#" title="End Date" data-toggle="popover" data-trigger="focus" data-content="Click to select date the Milestone is suppose to be completed "><i class="text-success fa fa-question-circle"></i></a>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <div class="form-line">
+                                <input type="text" class="form-control  datepicker mchk" id="MSEndDate" name="StringEndDate" title="Click to select date the Milestone is suppose to be completed" readonly />
+                                </div>
+                            </div>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" onclick="addMilestone()"class="btn btn-warning">Add Milestone</button>
+                        </div>
+                    </form>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    <link href="~/Content/facebox.css" media="screen" rel="stylesheet" type="text/css" />
+    <script src="~/Content/js/facebox.js" type="text/javascript"></script>
+    <script src="~/Scripts/form-wizard.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.multi-select.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+    $(function () {
+        
+        //dates 
+        $("#DevStartDate").datepicker({
+            // defaultDate: "+1w",
+            minDate: new Date(),
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd/mm/yy",
+            onClose: function (selectedDate) {
+                $("#DevEndDate").datepicker("option", "minDate", selectedDate);
+                $("#MSStartDate").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#DevEndDate").datepicker({
+            // defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd/mm/yy",
+            onClose: function (selectedDate) {
+                $("#DevStartDate").datepicker("option", "maxDate", selectedDate);
+                $("#UATDate").datepicker("option", "minDate", selectedDate);
+                $("#MSStartDate").datepicker("option", "maxDate", selectedDate);
+                $("#MSEndDate").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+
+       
+        $("#UATDate").datepicker({
+            // defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd/mm/yy",
+            onClose: function (selectedDate) {
+               // $("#DevStartDate").datepicker("option", "maxDate", selectedDate);
+                $("#DevEndDate").datepicker("option", "maxDate", selectedDate);
+                $("#ImplementationDate").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $("#ImplementationDate").datepicker({
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd/mm/yy", 
+            onClose: function (selectedDate) {
+                $("#UATDate").datepicker("option", "maxDate", selectedDate);
+               }
+        });
+
+        
+        ////dates 
+        $("#MSStartDate").datepicker({
+            // defaultDate: "+1w",
+           // maxDate: new Date(),
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd/mm/yy",
+            onClose: function (selectedDate) {
+                $("#MSEndDate").datepicker("option", "minDate", selectedDate);
+              
+               
+            }
+        });
+
+        $("#MSEndDate").datepicker({
+            // defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd/mm/yy",
+            onClose: function (selectedDate) {
+                 $("#MSStartDate").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+
+            
+
+        // multiple select
+            jQuery('a[rel*=facebox]').facebox();
+            $('.waves-effect').click(function () {
+                var message = "";
+
+                 var selected = $("#OtherDeveloper option:selected");
+                var arrDistinct = new Array();
+                $(selected).each(function () {
+                    arrDistinct.push($(this).val());
+                    //alert("item" + $(this).val());
+                });
+                //arrDistinct.unique();
+                var uniques = arrDistinct.filter(function (itm, i, a) {
+                    return i == arrDistinct.indexOf(itm);
+                });
+                uniques.forEach(function (element) {
+                    message += element + " ";
+                    //message +=  $(this).val() + " ";
+                    // message += $(this).text() + " " + $(this).val() + "\n";
+                });
+                 //alert(message);
+                $("#multiSelectLob").val(message);
+                 // alert("Mult" + $("#multiSelectLob").val());
+
+            });
+            // for document attachments
+            $('#Upload').click(function () {
+                var vname = $("#ProjectName").val();
+                // alert(vname);
+                $("#FDescription").val(vname);
+                //alert("FD" + $("#FDescription").val());
+            });
+
+
+            var dialog, attachdialog, form;
+
+            attachdialog = $("#attach-dialog").dialog({
+                title: "File Attachment",
+                autoOpen: false,
+                /*height: 300,*/
+                width: 550,
+                modal: true,
+
+                close: function () {
+                    attachform[0].reset();
+                }
+            });
+            $("#attach-doc").on("click", function (e) {
+                e.preventDefault();
+
+                attachdialog.dialog("open");
+            });
+
+            attachform = attachdialog.find("form");
+            var attachmentCount = $(".attachedFile").length;
+
+            $("#attach-form").ajaxForm({
+                dataType: "json",
+                beforeSend: function () {
+                    // alert(' before i send');
+                    $(".progress-indicator").show();
+                },
+                success: function (data) {
+                    if (data.R) {
+                        // alert("AM SUCCESSFUL");
+
+                        // append a new entry into files ol
+                        // and one to the main form
+                        // var attachmentCount = $(".attachedfile").length;
+                        attachmentCount = attachmentCount + 1;
+                        $("#wizard_with_validation").append($("<input type='hidden' name='ProjectAttachments[" + attachmentCount + "].FieldID' class='modalAddedField attachedfile' />").val(data.ID))
+                        .append($("<input type='hidden' name='ProjectAttachments[" + attachmentCount + "].FileName' class='modalAddedField' />").val(data.FileName))
+                        .append($("<input type='hidden' name='ProjectAttachments[" + attachmentCount + "].FileSystemName' class='modalAddedField' />").val(data.FileSystemName))
+                        .append($("<input type='hidden' name='ProjectAttachments[" + attachmentCount + "].Description' class='modalAddedField' />").val(data.Description))
+                        .append($("<input type='hidden' name='ProjectAttachments[" + attachmentCount + "].ContentType' class='modalAddedField' />").val(data.ContentType))
+                        //.append($("<input type='hidden' name='VendorAttachments[" + attachmentCount + "].FileStatus' class='modalAddedField' />").val(data.FileStatus));
+                        //.append($("<input type='hidden' name='VendorAttachments[" + attachmentCount + "].FileID' class='modalAddedField' />").val(data.ID));
+
+                        $(".attachment").append("<li id=\"attachment-li-" + attachmentCount + "\"><a href=\"" + data.DLink + "\" target=\"_blank\"><i class=\"fa fa-paperclip\"></i> " + data.FileName + "</a> <a href=\"javascript:;\" class=\"removeAttachment\" count=\"" + attachmentCount + "\" imgID=\"" + data.ID + "\"><i class=\"fa fa-times\"></i></a></li>");
+                    }
+                },
+                error: function (xhr, status, p3, p4) {
+                    var err = "Error " + " " + status + " " + p3 + " " + p4;
+                    if (xhr.responseText)
+                        err = JSON.parse(xhr.responseText).Message;
+                    //console.log(err);
+                    alert(err);
+
+                },
+
+                complete: function (data) {
+                    // alert("complete");
+                    $(".progress-indicator").hide();
+                    attachdialog.dialog("close");
+                }
+            });
+
+        //for removing attachment
+            $(document).on("click", ".removeAttachment", function (e) {
+                if (confirm("Do you wish to remove attachment?")) {
+                    // alert("url" + t_URL);
+                    var id = $(this).attr("imgID");
+                    //alert('id' + id);
+                    // remove this attachment
+                    var row = $(this).attr("count");
+                    var count = $(".attachedfile").length;
+                    // alert('the count' + count + 'the row '+ row+'the one to remove ' + $("#attachment-li-" + row));
+                    // remove li element
+                    $("#attachment-li-" + row).remove();
+                    // close up the gap
+                    for (var i = row; i < (count - 1) ; i++) {
+                        $("input[name='ProjectAttachments[" + i + "].FileID']").val($("input[name='ProjectAttachments[" + (parseInt(i) + 1) + "].FieldID']").val());
+                        $("input[name='ProjectAttachments[" + i + "].FileName']").val($("input[name='ProjectAttachments[" + (parseInt(i) + 1) + "].FileName']").val());
+                        $("input[name='ProjectAttachments[" + i + "].FileSystemName']").val($("input[name='ProjectAttachments[" + (parseInt(i) + 1) + "].FileSystemName']").val());
+                        $("input[name='ProjectAttachments[" + i + "].Description']").val($("input[name='ProjectAttachments[" + (parseInt(i) + 1) + "].Description']").val());
+                        //$("input[name=VendorAttachments[" + i + "].FileStatus']").val($("input[name='VendorAttachments[" + (parseInt(i) + 1) + "].FileStatus']").val());
+                    }
+
+                    $("input[name='ProjectAttachments[" + (count - 1) + "].FieldID']").remove();
+                    $("input[name='ProjectAttachments[" + (count - 1) + "].FileName']").remove();
+                    $("input[name='ProjectAttachments[" + (count - 1) + "].FileSystemName']").remove();
+                    $("input[name='ProjectAttachments[" + (count - 1) + "].Description']").remove();
+                    //$("input[name='VendorAttachments[" + (count - 1) + "].FileStatus']").remove();
+                    // alert("fileID" + id);
+                    $.ajax({
+                        type: 'POST',
+                        data: { "id": id },
+                        url: t_URL,
+                        dataType: "json",
+                        beforeSend: function () {
+                            //  alert(' before i del');
+                            $(".progress-indicator").show();
+                        },
+                        success: function (data) {
+                            if (data.D) {
+                                // alert("iDeleted" + data.msg);
+
+                            }
+                        },
+
+                        complete: function (data) {
+                            //  alert("complete");
+                            $(".progress-indicator").hide();
+                        }
+                    });
+
+                }
+            });
+
+            dialog = $("#dialog-form").dialog({
+                title: "New Docs",
+                autoOpen: false,
+                /*height: 300,*/
+                width: 650,
+                modal: true,
+                buttons: {
+                    "Save Docs": addProjectDocs,
+                    Cancel: function () {
+                        dialog.dialog("close");
+                    }
+                },
+                close: function () {
+                    form[0].reset();
+                    allFields.removeClass("ui-state-error");
+                }
+            });
+            form = dialog.find("form").on("submit", function (event) {
+                event.preventDefault();
+                addProjectDocs();
+            });
+
+    })
+
+        function addProjectDocs() {
+            // collect form values, and apend it to main form
+            var valid = true;
+            if (valid) {
+                dialog.dialog("close");
+            }
+            return valid;
+        }
+
+
+
+
+        //////////////////////////////////////
+        function NewMilestone(elem) {
+            $('#NewMilestone').modal('show');
+            $('#MSProjID').val($(elem).attr('projid'));
+           // alert('proj'+ $('#MSProjID').val() );
+           // $('#MSProjName').html($(elem).attr('projname'));
+            $('#MilestoneDescription').val('');
+            $('#MilestoneDescription').html('');
+
+        }
+
+        ////////////////////////////////////////
+
+        function addMilestone() {
+            if (ValidNewMilestoneFields() == "Filled") {
+               
+                var edate = $("#MSEndDate").val();
+                var sdate = $("#MSStartDate").val();
+                alert("enddate" + edate+"startdate"+ sdate);
+              var datastring = $("#newMilestoneFrm").serialize();
+              // var datastring = { 'MilestoneName': $("#MilestoneName").val(), "StartDate":sdate, 'EndDate': edate, "weight": $("#MilestoneWeight").val(), "MilestoneDescr": $("#MilestoneDescription").val(), "ProjectID": $("#MSProjID").val() };
+                alert("data" + datastring);
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AddMilestone", "Home")",
+                    data: datastring,
+                dataType: "json",
+                success: function (data) {
+                   
+                        $('#MilestoneTab tr:first').before(data.TabRow);
+                    
+                    generalSuccess(data.msg);
+                    $('#MilestoneName').val('');
+                    $('#MilestoneDescription').html('');
+                    $('#MSStartDate').val('');
+                    $('#MSEndDate').val('');
+                    $('#MilestoneWeight').html('');
+                    $('#NewMilestone').modal('hide');
+                },
+                error: function () {
+                    //alert('error handing here');
+                    generalError(data.msg);
+                }
+            });
+        }
+        else if (ValidNewMilestoneFields() == "Incomplete") {
+
+            generalError("Kindly fill the form compeletly");
+
+            return false;
+        }
+        }
+        ////////////////////////////////////////////
+        function ValidNewMilestoneFields() {
+            //Let's check through the form now
+            var fStatus = 0;
+            $.each($(".mchk"), function (i, v) {
+
+                var sFildVal = $(v).val();
+                if (sFildVal == "" || sFildVal == null) {
+                    $(v).attr('style', 'background-color: #ff5252');
+                   
+                    fStatus = 1;
+                    //return false;
+                    //exit;
+                }
+                else {
+
+                }
+            });
+
+
+            if (fStatus == 1) {
+                return "Incomplete";
+            }
+            else {
+                return "Filled";
+            }
+        }
+
+        function listenLeadDevClick() {
+
+            $("input[name='MRPType']").click(function () {
+                var mrp = $(this).val();
+                //alert("mrp" + mrp);
+                FillLotSize(mrp);
+                FillMRPCtrl(mrp);
+            });
+        }
+        function FillDev() {
+             // alert("biz");
+             var tos =  $("#LeadDeveloper").val();
+           alert("tos" + tos);//'/SetUp/FillBiz
+            $.ajax({
+                url: ' @Url.Action("FillDev", "SetUp")',
+                type: "GET",
+                dataType: "JSON",
+                data: { tos: tos },
+                success: function (bizs) {
+                   // alert("bizs" + bizs);
+                    //$('#showme').show();
+                    $("#OtherDeveloper").html(""); // clear before appending new list
+                    $("#OtherDeevloper").append("<option> Select other Developers </option>")
+                    for (var i = 0; i < bizs.length; i++) {
+
+                        $("#OtherDeveloper").append("<option>" + bizs[i].label + "</option>");
+                    }
+                   // alert("LOB" + $("#OtherDeveloper").html());
+                    $("#OtherDeveloper").multiSelect('destroy');
+                    $('#OtherDeveloper').multiSelect({
+                        // includeSelectAllOption: true
+                    });
+
+                                     
+                }
+            });
+        }
+    $(function () {
+
+
+        // for request type that is change request  show
+        $('#ProjectName').on("change", function (e) {
+            alert('i changed ' + $('#ProjectName').val());
+            var projectVal = $('#ProjectName').val();
+
+            $('#FDescription').val(projectVal);
+
+
+        });
+    });
+
+    </script>
+}
+
+
+
+
+
+
+
+
